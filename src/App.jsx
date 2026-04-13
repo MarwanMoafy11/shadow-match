@@ -41,22 +41,22 @@ export default function App(){
     <h1 className='text-2xl md:text-4xl font-bold mb-2'>🎮 لعبة توصيل الظل</h1>
     <p className='mb-4 text-base md:text-xl'>الجولة {round+1} / {rounds.length}</p>
 
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 max-w-4xl mx-auto'>
+    <div className='grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-2 md:gap-4 max-w-4xl mx-auto'>
       {items.map(id => (
-        <div key={id} draggable={!done.includes(id)} onDragStart={() => setDrag(id)} onTouchStart={(e) => { const t=e.touches[0]; setDrag(id); if(ghost.current){ghost.current.style.display='block'; ghost.current.style.left=t.clientX+'px'; ghost.current.style.top=t.clientY+'px';}}} onTouchMove={(e)=>{e.preventDefault(); const t=e.touches[0]; if(ghost.current){ghost.current.style.left=t.clientX+'px'; ghost.current.style.top=t.clientY+'px';}}} onTouchEnd={(e)=>{const t=e.changedTouches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); const box=el?.closest('[data-drop]'); if(box) drop(Number(box.getAttribute('data-drop'))); else setDrag(null); if(ghost.current) ghost.current.style.display='none';}} onClick={() => setSelected(id)} className={`bg-white rounded-2xl p-3 shadow h-24 md:h-36 flex items-center justify-center cursor-grab active:scale-95 ${done.includes(id)?'opacity-30':''}`}>
+        <div key={id} draggable={!done.includes(id)} onDragStart={() => setDrag(id)} onTouchStart={(e) => { const t=e.touches[0]; setDrag(id); if(ghost.current){ghost.current.style.display='block'; ghost.current.style.left=t.clientX+'px'; ghost.current.style.top=t.clientY+'px';}}} onTouchMove={(e)=>{e.preventDefault(); const t=e.touches[0]; if(ghost.current){ghost.current.style.left=t.clientX+'px'; ghost.current.style.top=t.clientY+'px';}}} onTouchEnd={(e)=>{const t=e.changedTouches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); const box=el?.closest('[data-drop]'); if(box) drop(Number(box.getAttribute('data-drop'))); else setDrag(null); if(ghost.current) ghost.current.style.display='none';}} onClick={() => setSelected(id)} className={`bg-white rounded-2xl p-2 shadow h-20 md:h-32 flex items-center justify-center cursor-grab active:scale-95 ${done.includes(id)?'opacity-30':''}`}>
           <img src={`/images/round${round+1}/item${id}.png`} className='max-h-full object-contain' onError={(e)=>e.currentTarget.parentElement.innerHTML='ضع الصورة هنا'} />
         </div>
       ))}
     </div>
 
     <div className='mt-4 md:mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto'>
-      {targets.map(id=><div key={id} data-drop={id} onDragOver={(e)=>e.preventDefault()} onDrop={()=>drop(id)} onClick={()=>drop(id)} className='bg-white rounded-2xl p-3 shadow h-24 md:h-36 flex items-center justify-center'>
+      {targets.map(id=><div key={id} data-drop={id} onDragOver={(e)=>e.preventDefault()} onDrop={()=>drop(id)} onClick={()=>drop(id)} className='bg-white rounded-2xl p-2 shadow h-20 md:h-32 flex items-center justify-center'>
         {done.includes(id)
           ? <img src={`/images/round${round+1}/item${id}.png`} className='max-h-full object-contain' />
           : <img src={`/images/round${round+1}/shadow${id}.png`} className='max-h-full object-contain' onError={(e)=>{e.currentTarget.src=`/images/round${round+1}/item${id}.png`; e.currentTarget.className='max-h-full object-contain opacity-20 grayscale brightness-0';}} />}
       </div>)}
     </div>
 
-    <div ref={ghost} className='fixed hidden pointer-events-none z-50 w-14 h-14 md:w-20 md:h-20 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow'></div><p className='mt-6 text-gray-600'>اسحب الصورة وضعها فوق الظل الصحيح</p>
+    <div ref={ghost} className='fixed hidden pointer-events-none z-50 w-12 h-12 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow'></div><p className='mt-6 text-gray-600'>اسحب الصورة وضعها فوق الظل الصحيح</p>
   </div>;
 }
