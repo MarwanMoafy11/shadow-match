@@ -36,7 +36,7 @@ export default function App(){
 
   if(finished) return <div className='min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-green-100 p-6 flex items-center justify-center text-center'><div className='bg-white p-10 rounded-3xl shadow-2xl max-w-xl'><div className='text-6xl mb-4'>🏆</div><h1 className='text-4xl font-bold mb-4'>مبروك 🎉</h1><p className='text-2xl mb-6'>أنت كده حليت كل التحديات 👏🔥</p><button onClick={()=>{setRound(0);setDone([]);setFinished(false);}} className='px-6 py-3 bg-green-500 text-white rounded-2xl text-xl font-bold'>🔄 العب من جديد</button></div></div>;
 
-  return <div className='min-h-screen bg-gradient-to-br from-pink-100 via-sky-100 to-yellow-100 p-3 md:p-6 text-center overflow-x-hidden'>
+  return <div className='min-h-screen bg-gradient-to-br from-pink-100 via-sky-100 to-yellow-100 p-3 md:p-6 text-center overflow-x-hidden overscroll-none' style={{touchAction:'none'}}>
     {msg && <div className='fixed top-4 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-2xl shadow text-2xl font-bold z-50'>{msg}</div>}
     <h1 className='text-2xl md:text-4xl font-bold mb-2'>🎮 لعبة توصيل الظل</h1>
     <p className='mb-4 text-base md:text-xl'>الجولة {round+1} / {rounds.length}</p>
