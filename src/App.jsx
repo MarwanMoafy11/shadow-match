@@ -16,15 +16,17 @@ export default function App(){
   const [finished,setFinished]=useState(false);
   const [selected,setSelected]=useState(null);
   const ghost = useRef(null);
+  const clap = useRef(null);
 
   const show=(t)=>{ setMsg(t); clearTimeout(timer.current); timer.current=setTimeout(()=>setMsg(''),1800); };
+  const playClap=()=>{ if(clap.current){ clap.current.currentTime=0; clap.current.play().catch(()=>{}); } };
 
   const drop=(id)=>{
     const active = drag ?? selected;
     if(active===null || done.includes(id)) return;
     if(active===id){
       const next=[...done,id]; setDone(next); show('⭐ رائع');
-      if(next.length===count){
+      if(next.length===count){ playClap();
         setTimeout(()=>{
           if(round<rounds.length-1){ setRound(r=>r+1); setDone([]); }
           else { setFinished(true); show('🎉 ممتاز'); }
@@ -41,7 +43,7 @@ export default function App(){
     <h1 className='text-2xl md:text-4xl font-bold mb-2'>🎮 لعبة توصيل الظل</h1>
     <p className='mb-4 text-base md:text-xl'>الجولة {round+1} / {rounds.length}</p>
 
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-2 md:gap-4 max-w-4xl mx-auto'>
+    <div className='max-w-5xl mx-auto grid grid-cols-2 gap-4 items-start'>
       {items.map(id => (
         <div key={id} draggable={!done.includes(id)} onDragStart={() => setDrag(id)} onTouchStart={(e) => { const t=e.touches[0]; setDrag(id); if(ghost.current){ghost.current.style.display='block'; ghost.current.style.left=t.clientX+'px'; ghost.current.style.top=t.clientY+'px';}}} onTouchMove={(e)=>{e.preventDefault(); const t=e.touches[0]; if(ghost.current){ghost.current.style.left=t.clientX+'px'; ghost.current.style.top=t.clientY+'px';}}} onTouchEnd={(e)=>{const t=e.changedTouches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); const box=el?.closest('[data-drop]'); if(box) drop(Number(box.getAttribute('data-drop'))); else setDrag(null); if(ghost.current) ghost.current.style.display='none';}} onClick={() => setSelected(id)} className={`bg-white rounded-2xl p-2 shadow h-20 md:h-32 flex items-center justify-center cursor-grab active:scale-95 ${done.includes(id)?'opacity-30':''}`}>
           <img src={`/images/round${round+1}/item${id}.png`} className='max-h-full object-contain' onError={(e)=>e.currentTarget.parentElement.innerHTML='ضع الصورة هنا'} />
@@ -49,7 +51,7 @@ export default function App(){
       ))}
     </div>
 
-    <div className='mt-4 md:mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto'>
+    <div className='max-w-5xl mx-auto grid grid-cols-2 gap-4 items-start mt-4'>
       {targets.map(id=><div key={id} data-drop={id} onDragOver={(e)=>e.preventDefault()} onDrop={()=>drop(id)} onClick={()=>drop(id)} className='bg-white rounded-2xl p-2 shadow h-20 md:h-32 flex items-center justify-center'>
         {done.includes(id)
           ? <img src={`/images/round${round+1}/item${id}.png`} className='max-h-full object-contain' />
@@ -57,6 +59,7 @@ export default function App(){
       </div>)}
     </div>
 
+    <audio ref={clap} src='https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b54a9a4a.mp3?filename=small-crowd-applause-6695.mp3' preload='auto' />
     <div ref={ghost} className='fixed hidden pointer-events-none z-50 w-12 h-12 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow'></div><p className='mt-6 text-gray-600'>اسحب الصورة وضعها فوق الظل الصحيح</p>
   </div>;
 }
